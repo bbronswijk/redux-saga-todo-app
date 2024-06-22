@@ -8,15 +8,37 @@ import {
 } from '@/store/actions';
 import { TodoState } from '@/store/store';
 
+export const activateLoaderReducer = (state: TodoState): TodoState => ({
+  ...state,
+  loading: true,
+});
+
+export const setErrorReducer = (
+  state: TodoState,
+  { payload }: { payload: string }
+): TodoState => ({
+  ...state,
+  error: payload,
+  loading: false,
+});
+
 export const fetchSuccessReducer = (
   state: TodoState,
   action: ReturnType<typeof fetchTodosSuccessAction>
-): TodoState => ({ ...state, todos: action.payload });
+): TodoState => ({
+  ...state,
+  loading: false,
+  todos: action.payload,
+});
 
 export const createSuccessReducer = (
   state: TodoState,
   action: ReturnType<typeof createTodoSuccessAction>
-): TodoState => ({ ...state, todos: [action.payload, ...state.todos] });
+): TodoState => ({
+  ...state,
+  loading: false,
+  todos: [action.payload, ...state.todos],
+});
 
 export const deleteSuccessReducer = (
   state: TodoState,
@@ -24,6 +46,7 @@ export const deleteSuccessReducer = (
 ): TodoState => ({
   ...state,
   todos: state.todos.filter((todo) => todo.id !== action.payload),
+  loading: false,
 });
 
 export const toggleSuccessReducer = (
@@ -34,6 +57,7 @@ export const toggleSuccessReducer = (
   todos: state.todos.map((todo) =>
     todo.id === action.payload.id ? action.payload : todo
   ),
+  loading: false,
 });
 
 export const setSelectedFilterReducer = (
@@ -42,6 +66,7 @@ export const setSelectedFilterReducer = (
 ): TodoState => ({
   ...state,
   selectedFilter: action.payload,
+  loading: false,
 });
 
 export const clearCompletedSuccessReducer = (
@@ -50,4 +75,5 @@ export const clearCompletedSuccessReducer = (
 ): TodoState => ({
   ...state,
   todos: state.todos.filter((todo) => !action.payload.includes(todo.id)),
+  loading: false,
 });

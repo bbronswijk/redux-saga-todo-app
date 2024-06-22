@@ -4,6 +4,10 @@ import { Todo } from '@bbronswijk/kotlin-todo-api-client';
 export const selectSelectedFilter = (state: TodoState): FilterType =>
   state.selectedFilter;
 export const selectTodos = (state: TodoState): Todo[] => state.todos;
+export const selectLoading = (state: TodoState): boolean => state.loading;
+export const selectError = (state: TodoState): string | undefined =>
+  state.error;
+
 export const selectFilteredTodos = (
   selectedFilter: FilterType,
   todos: Todo[]

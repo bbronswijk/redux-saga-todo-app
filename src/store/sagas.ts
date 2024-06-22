@@ -13,57 +13,87 @@ import {
 } from '@/api/api';
 import {
   clearCompletedAction,
+  clearCompletedFailedAction,
   clearCompletedSuccessAction,
   createTodoAction,
+  createTodoFailedAction,
   createTodoSuccessAction,
   deleteTodoAction,
+  deleteTodoFailedAction,
   deleteTodoSuccessAction,
+  fetchTodosFailedAction,
   fetchTodosSuccessAction,
   toggleTodoAction,
+  toggleTodoFailedAction,
   toggleTodoSuccessAction,
   updateTodoAction,
+  updateTodoFailedAction,
   updateTodoSuccessAction,
 } from '@/store/actions';
 
 export function* fetchTodosSaga() {
-  const todos: Todo[] = yield call(getTodosApi);
-  yield put(fetchTodosSuccessAction(todos));
+  try {
+    const todos: Todo[] = yield call(getTodosApi);
+    yield put(fetchTodosSuccessAction(todos));
+  } catch (e) {
+    yield put(fetchTodosFailedAction('Failed to fetch todos'));
+  }
 }
 
 export function* createTodoSaga({
   payload,
 }: ReturnType<typeof createTodoAction>) {
-  const todo: Todo = yield call(postTodoApi, payload);
-  yield put(createTodoSuccessAction(todo));
+  try {
+    const todo: Todo = yield call(postTodoApi, payload);
+    yield put(createTodoSuccessAction(todo));
+  } catch (e) {
+    yield put(createTodoFailedAction('Failed to create todo'));
+  }
 }
 
 export function* updateTodoSaga({
   payload,
 }: ReturnType<typeof updateTodoAction>) {
-  const todo: Todo = yield call(patchTodoApi, payload);
-  yield put(updateTodoSuccessAction(todo));
+  try {
+    const todo: Todo = yield call(patchTodoApi, payload);
+    yield put(updateTodoSuccessAction(todo));
+  } catch (e) {
+    yield put(updateTodoFailedAction('Failed to update todo'));
+  }
 }
 
 export function* deleteTodoSaga({
   payload,
 }: ReturnType<typeof deleteTodoAction>) {
-  const todoId: string = yield call(deleteTodoApi, payload.id);
-  yield put(deleteTodoSuccessAction(todoId));
+  try {
+    const todoId: string = yield call(deleteTodoApi, payload.id);
+    yield put(deleteTodoSuccessAction(todoId));
+  } catch (e) {
+    yield put(deleteTodoFailedAction('Failed to delete todo'));
+  }
 }
 
 export function* toggleTodoSaga({
   payload,
 }: ReturnType<typeof toggleTodoAction>) {
-  const todo: Todo = yield call(toggleTodoApi, payload);
-  yield put(toggleTodoSuccessAction(todo));
+  try {
+    const todo: Todo = yield call(toggleTodoApi, payload);
+    yield put(toggleTodoSuccessAction(todo));
+  } catch (e) {
+    yield put(toggleTodoFailedAction('Failed to toggle todo'));
+  }
 }
 
 export function* clearCompletedSaga({
   payload,
 }: ReturnType<typeof clearCompletedAction>) {
-  const deletedIds: DeleteManyTodosRequest['deleteIds'] = yield call(
-    deleteTodosApi,
-    payload
-  );
-  yield put(clearCompletedSuccessAction(deletedIds));
+  try {
+    const deletedIds: DeleteManyTodosRequest['deleteIds'] = yield call(
+      deleteTodosApi,
+      payload
+    );
+    yield put(clearCompletedSuccessAction(deletedIds));
+  } catch (e) {
+    yield put(clearCompletedFailedAction('Failed to clear completed todos'));
+  }
 }

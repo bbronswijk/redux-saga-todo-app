@@ -22,7 +22,7 @@ const CreateForm = () => {
   return (
     <form
       onSubmit={save}
-      className='relative mb-8 flex rounded-lg bg-card text-card-foreground shadow-lg md:rounded'
+      className='relative flex rounded-lg bg-card text-card-foreground shadow-lg md:rounded'
     >
       <Checkbox
         checked={completed}
